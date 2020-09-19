@@ -2,8 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 
-// const authenitcate 
-// const authRouter = requre
+// const authenitcate = require('../auth/authentication-middleware')
+const authRouter = require('../auth/authRouter')
 // const recipesRouter = require
 
 const server = express()
@@ -13,7 +13,7 @@ server.use(cors())
 server.use(express.json())
 server.use(logger)
 
-//server.use('/auth', authRouter)
+server.use('/auth', authRouter)
 //server.use('/recipes', authenticate, recipesRouter)
 
 server.get('/', (req, res) => {
