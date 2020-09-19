@@ -5,7 +5,7 @@ const Users = require('../users/usersModel')
 
 const router = express.Router()
 
-router.post('/register', validateUser, (req, res) => {
+router.post('/register', validateNewUser, (req, res) => {
     const credentials = req.body 
     
     const rounds = process.env.BCRYPT_ROUNDS || 8
@@ -47,6 +47,18 @@ router.post('/login', validateUser, (req, res) => {
 
     })
 })
+
+function validateNewUser(req, res, next) {
+    const { username, password, email } = req.body
+
+    if(!req.body) {
+        res.status(400).json({ message: 'missing user information' })
+    } else if(!username && !email && !password) {
+        res.status(400).json({ message: 'username, email, and password required' })
+    } else {
+        next()
+    }
+}
 
 function validateUser(req, res, next) {
     const { username, password } = req.body

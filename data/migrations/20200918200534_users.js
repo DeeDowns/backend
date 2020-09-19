@@ -8,6 +8,10 @@ exports.up = function(knex) {
       .notNullable()
       .unique()
 
+      table.string('email', 128)
+      .notNullable()
+      .unique()
+
       table.string('password', 256)
       .notNullable()
   })
