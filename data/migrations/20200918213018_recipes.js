@@ -15,6 +15,10 @@ exports.up = function(knex) {
         table.string('description')
         .nullable()
 
+        table.string('category', 80)
+        .nullable()
+        .index()
+
         table.string('image', 256)
         .nullable()
 
@@ -24,6 +28,8 @@ exports.up = function(knex) {
         .references('users.id')
         .onDelete('RESTRICT')
         .onUpdate('CASCADE')
+
+        
     })
 
     .createTable('ingredients', table => {
@@ -77,36 +83,6 @@ exports.up = function(knex) {
         .notNullable()
         .index()
     })
-
-    .createTable('categories', table => {
-        table.increments()
-
-        table.string('category')
-        .notNullable()
-        .unique()
-        .index()
-
-
-    })
-
-    .createTable('recipe_categories', table => {
-        table.increments()
-
-        table.integer('recipe_id') 
-        .unsigned()
-        .notNullable()
-        .references('recipes.id')
-        .onDelete('RESTRICT')
-        .onUpdate('CASCADE')
-
-        table.integer('category_id') 
-        .unsigned()
-        .notNullable()
-        .references('categories.id')
-        .onDelete('RESTRICT')
-        .onUpdate('CASCADE')  
-    })
-
 
 };
 
