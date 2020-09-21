@@ -1,12 +1,9 @@
 const db = require('../../data/db-connection')
-const { findById } = require('../recipesModel')
-const { where } = require('../../data/db-connection')
 
 module.exports = {
     getIngredients,
     addIngredients,
     findIngredientById,
-    findById,
     updateIngredients,
     removeIngredients
 }

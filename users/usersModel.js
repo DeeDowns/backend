@@ -28,11 +28,3 @@ function add(user) {
         return findById(id)
     })
 }
-
-
-// function getUserRecipes(id) {
-//     return db('recipes')
-//     .join('users', 'users.id', 'recipes.user_id')
-//     .select('recipes.id','recipes.title', 'recipes.source', 'recipes.image', 'recipes.description', 'recipes.category')
-//     .where({'users.id': id })
-// }
