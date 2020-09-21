@@ -11,7 +11,7 @@ module.exports = {
 function getIngredients(recipe_id) {
     return db('ingredients')
     .join('recipes', 'recipes.id', 'ingredients.recipe_id')
-    .select('ingredients.id', 'ingredients.ingredient')
+    .select('ingredients.id', 'ingredients.ingredient',)
     .where('recipes.id', recipe_id)
 }
 
