@@ -5,7 +5,10 @@ const { where } = require('../../data/db-connection')
 module.exports = {
     getIngredients,
     addIngredients,
-    findById
+    findIngredientById,
+    findById,
+    updateIngredients,
+    removeIngredients
 }
 
 function getIngredients(recipe_id) {
@@ -18,6 +21,7 @@ function getIngredients(recipe_id) {
 function findIngredientById(ingredient_id) {
     return db('ingredients')
     .where('ingredients.id', ingredient_id)
+    .first()
    
 }
 
@@ -29,5 +33,17 @@ function addIngredients(ingredient) {
         return findIngredientById(id)
     })
    
+}
+
+function removeIngredients(id) {
+    return db('ingredients') 
+    .where({id})
+    .del()
+}
+
+function updateIngredients(id, changes) {
+    return db('ingredients')
+    .where({ id })
+    .update(changes)
 }
 

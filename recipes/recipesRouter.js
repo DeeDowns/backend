@@ -119,7 +119,7 @@ router.put('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) =
     })
 })
 
-//get recipe's ingredients
+//get all ingredients for a recipe
 router.get('/my-recipes/:id/ingredients', (req, res) => {
     const { id } = req.params
 
@@ -134,6 +134,22 @@ router.get('/my-recipes/:id/ingredients', (req, res) => {
     })
 })
 
+//get a particular ingredient for a recipe
+router.get('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
+    const { id, ing_id } = req.params
+
+    Ingredients.findIngredientById(ing_id)
+    .then(ingredient => {
+        console.log(ingredient)
+        res.status(200).json(ingredient)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+//add an ingredient to a recipe
 router.post('/my-recipes/:id/ingredients', (req, res) => {
     const { id } = req.params
     const { ingredient, recipe_id } = req.body
@@ -149,7 +165,44 @@ router.post('/my-recipes/:id/ingredients', (req, res) => {
     })
 })
 
+//remove a particular ingredient from a recipe
+router.delete('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
+    const { id, ing_id} = req.params
 
+    Ingredients.removeIngredients(ing_id) 
+    .then(count => {
+        console.log(count)
+        if(count > 0) {
+            res.status(200).json({ message: 'ingredient removed' })
+        } else {
+            res.status(400).json({ message: 'error removing ingredient' })
+        }
+        
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+//edit a recipe's particular ingredient 
+router.put('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
+    const { id, ing_id } = req.params
+    const { ingredient, recipe_id } = req.body
+
+    Ingredients.updateIngredients(ing_id, { ingredient, recipe_id: id })
+    .then(updated => {
+        console.log(updated)
+        if(updated > 0) {
+            res.status(200).json({ message: 'ingredient updated' })
+        } else {
+            res.status(400).json({ message: 'error updating ingredient' })
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
 
 
 
