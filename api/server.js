@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const authenticate = require('../auth/authentication-middleware')
 const authRouter = require('../auth/authRouter')
 const recipesRouter = require('../recipes/recipesRouter')
+const usersRouter = require('../users/usersRouter')
 
 const server = express()
 
@@ -15,6 +16,7 @@ server.use(logger)
 
 server.use('/auth', authRouter)
 server.use('/recipes', authenticate, recipesRouter)
+server.use('/users', authenticate, usersRouter)
 
 server.get('/', (req, res) => {
     res.status(200).json({ Welcome: 'to Secret Family Recipes Server' })

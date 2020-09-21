@@ -38,17 +38,6 @@ exports.up = function(knex) {
         table.string('ingredient', 256)
         .notNullable()
         .index()
-    })
-
-    .createTable('recipe_ingredients', table => {
-        table.increments()
-
-        table.integer('ingredient_id')
-        .unsigned()
-        .notNullable()
-        .references('ingredients.id')
-        .onDelete('RESTRICT')
-        .onUpdate('CASCADE')
 
         table.integer('recipe_id')
         .unsigned()
@@ -56,13 +45,31 @@ exports.up = function(knex) {
         .references('recipes.id')
         .onDelete('RESTRICT')
         .onUpdate('CASCADE')
-
-        table.string('quantity', 80)
-        .notNullable()
-        
-        table.string('unit_of_measurement', 80)
-        .notNullable()
     })
+
+    // .createTable('recipe_ingredients', table => {
+    //     table.increments()
+
+    //     table.integer('ingredient_id')
+    //     .unsigned()
+    //     .notNullable()
+    //     .references('ingredients.id')
+    //     .onDelete('RESTRICT')
+    //     .onUpdate('CASCADE')
+
+    //     table.integer('recipe_id')
+    //     .unsigned()
+    //     .notNullable()
+    //     .references('recipes.id')
+    //     .onDelete('RESTRICT')
+    //     .onUpdate('CASCADE')
+
+    //     table.string('quantity', 80)
+    //     .notNullable()
+        
+    //     table.string('unit_of_measurement', 80)
+    //     .notNullable()
+    // })
 
 
     .createTable('instructions', table => {
@@ -91,7 +98,6 @@ exports.down = function(knex) {
   .dropTableIfExists('recipe_categories')
   .dropTableIfExists('categories')
   .dropTableIfExists('instructions')
-  .dropTableIfExists('recipe_ingredients')
   .dropTableIfExists('ingredients')
   .dropTableIfExists('recipes')
 };

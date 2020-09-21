@@ -1,11 +1,12 @@
 const express = require('express')
 const Recipes = require('./recipesModel')
+const Ingredients = require('./ingredients/ingredientsModel')
 const Categories = require('./categories/categoriesModel')
 
 const router = express.Router()
 
 //get all recipes from all users
-router.get('/', (req, res) => {
+router.get('/all-users', (req, res) => {
     Recipes.getAllRecipes()
     .then(recipes => {
         console.log(recipes)
@@ -18,9 +19,10 @@ router.get('/', (req, res) => {
 })
 
 // get recipe by id from any user
-router.get('/:id', validateRecipeId, (req, res) => {
-    res.status(200).json(req.recipe)   
+router.get('/all-users/:id', validateRecipeId, (req, res) => {
+    res.status(200).json(req.recipe)    
 })
+
 
 //get all recipes from logged-in user
 router.get('/my-recipes', (req, res) => {
@@ -47,6 +49,7 @@ router.get('/my-recipes/:id', validateUserRecipe, (req, res) => {
 
     // Recipes.findById(id)
     // .then(recipe => {
+    //     console.log(recipe)
     //     if(recipe.username === user_id) {
     //         res.status(200).json(recipe)
     //     } else {
@@ -58,15 +61,14 @@ router.get('/my-recipes/:id', validateUserRecipe, (req, res) => {
     // })
 
     res.status(200).json(req.recipe)
-
 })
 
 //add logged-in user's new recipe
-router.post('/', (req, res) => {
+router.post('/my-recipes', (req, res) => {
     const { title, source, image, description, category, user_id } = req.body
     const userId = req.jwt.subject
 
-    Recipes.add({ title, source, image, description, category, user_id: userId })
+    Recipes.addUserRecipe({ title, source, image, description, category, user_id: userId })
     .then(recipe => {
         console.log(recipe)
         res.status(201).json({message: 'recipe added', recipe})
@@ -78,10 +80,10 @@ router.post('/', (req, res) => {
 })
 
 //removed logged-in user's recipe
-router.delete('/my-recipes/:id', validateUserRecipe, (req, res) => {
+router.delete('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
     const { id } = req.params
 
-    Recipes.remove(id)
+    Recipes.removeUserRecipe(id)
     .then(count => {
         console.log(count)
         if(count > 0) {
@@ -98,19 +100,58 @@ router.delete('/my-recipes/:id', validateUserRecipe, (req, res) => {
 })
 
 //edit logged-in users recipe
-router.put('/my-recipes/:id', (req, res) => {
-    const { id } = req.params
+router.put('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
+    const { id }  = req.params
     const changes = req.body
     // const userId = req.jwt.subject
 
-    Recipes.updateUserRecipe(changes)
-    .then(updated => {
-        console.log(updated)
+    Recipes.updateUserRecipe(id, changes)
+    .then(count => {
+        console.log(count)
+        if(count > 0) {
+            res.status(200).json({message: 'recipe updated' })
+        } else {
+            res.status(400).json({ message: 'error updating recipe' })
+        }  
     })
     .catch(err => {
         console.log(err)
     })
 })
+
+//get recipe's ingredients
+router.get('/my-recipes/:id/ingredients', (req, res) => {
+    const { id } = req.params
+
+    Ingredients.getIngredients(id)
+    .then(ingredients => {
+        console.log(ingredients)
+        res.status(200).json(ingredients)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+router.post('/my-recipes/:id/ingredients', (req, res) => {
+    const { id } = req.params
+    const { ingredient, recipe_id } = req.body
+
+    Ingredients.addIngredients({ ingredient, recipe_id: id})
+    .then(ingredient => {
+        console.log(ingredient)
+        res.status(201).json(ingredient)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+
+
+
 
 
 
@@ -120,10 +161,11 @@ router.put('/my-recipes/:id', (req, res) => {
 //if no recipe, return 404 error
 function validateRecipeId(req, res, next) {
     const { id } = req.params
+    const user_id = req.jwt.username
    
     Recipes.findById(id)
     .then(recipe => {
-        if(!recipe) {
+        if(!recipe && recipe.username !== user_id) {
             res.status(404).json({ message: 'recipe not found' })
         } else {
             req.recipe = recipe
@@ -146,9 +188,7 @@ function validateUserRecipe(req, res, next) {
 
     Recipes.findById(id)
     .then(recipe => {
-        if (!recipe) {
-            res.status(404).json({ message: 'recipe not found' })
-        } else if (recipe.username !== user_id) {
+         if (recipe.username !== user_id) {
             res.status(403).json({ message: 'recipe not yours' })
             
         } else {
@@ -161,6 +201,18 @@ function validateUserRecipe(req, res, next) {
         res.status(500).json({ message: err.message })
     }) 
 }
+
+// function validatePostRecipe(req, res, next) {
+//     const { title, category } = req.body
+
+//     if(!req.body) {
+//         res.status(400).json({ message: 'missing recipe information' })
+//     } else if(!title && category === null) {
+//         res.status(400).json({ message: 'recipe needs title and category'})
+//     } else {
+//         next()
+//     }
+// }
 
 
 module.exports = router
