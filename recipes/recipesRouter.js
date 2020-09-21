@@ -2,6 +2,7 @@ const express = require('express')
 const Recipes = require('./recipesModel')
 const Ingredients = require('./ingredients/ingredientsModel')
 const Instructions = require('./instructions/instructionsModel')
+const { del } = require('../data/db-connection')
 
 
 const router = express.Router()
@@ -263,16 +264,6 @@ router.put('/my-recipes/:id/instructions/:ins_id', (req,res) => {
     const { id, ins_id } = req.params
     const { instructions, recipe_id, step_number } = req.body
 
-    // Instructions.findInstructionsById(ins_id).then(instructions => {
-    //     Instructions.updateInstructions(ins_id, { instructions, recipe_id: id })
-    //     .then(updated => {
-    //         console.log(updated)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // }) 
-
     Instructions.updateInstructions(ins_id, { instructions, recipe_id: id, step_number })
         .then(updated => {
             console.log(updated)
@@ -288,6 +279,26 @@ router.put('/my-recipes/:id/instructions/:ins_id', (req,res) => {
         })
    
 })
+
+//delete recipe instructions
+router.delete('/my-recipes/:id/instructions/:ins_id', (req, res) => {
+    const { id, ins_id } = req.params
+
+    Instructions.removeInstructions(ins_id) 
+    .then(deleted => {
+        console.log(deleted)
+        if(deleted > 0) {
+            res.status(200).json({  message: 'instructions removed' })
+        } else {
+            res.status(400).json({ message: 'error removing instructions'})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+
 
 
 

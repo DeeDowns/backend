@@ -6,7 +6,7 @@ module.exports = {
     addInstructions,
     findInstructionsById,
     updateInstructions,
-    // removeInstructions
+    removeInstructions
 }
 
 function getInstructions(recipe_id) {
@@ -38,4 +38,9 @@ function updateInstructions(id, changes) {
     .update(changes)
 }
 
+function removeInstructions(id) {
+    return db('instructions')
+    .where({ id })
+    .del()
+}
 
