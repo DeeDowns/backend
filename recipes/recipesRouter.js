@@ -1,7 +1,8 @@
 const express = require('express')
 const Recipes = require('./recipesModel')
 const Ingredients = require('./ingredients/ingredientsModel')
-const Categories = require('./categories/categoriesModel')
+const Instructions = require('./instructions/instructionsModel')
+
 
 const router = express.Router()
 
@@ -197,6 +198,21 @@ router.put('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
         } else {
             res.status(400).json({ message: 'error updating ingredient' })
         }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+
+router.get('/my-recipes/:id/instructions', (req, res) => {
+    const { id } = req.params
+
+    Instructions.getInstructions(id)
+    .then(instructions => {
+        console.log(instructions)
+        res.status(200).json(instructions)
     })
     .catch(err => {
         console.log(err)

@@ -24,3 +24,10 @@ join recipe_ingredients on recipe_ingredients.ingredient_id = ingredients.id
 where recipes.id = 1 
 
 
+-- show a recipe's instructions
+select * from instructions
+join recipes on recipes.id = instructions.recipe_id  
+where recipes.id = 1
+order by instructions.step_number
+
+
