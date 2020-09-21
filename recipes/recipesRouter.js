@@ -7,7 +7,7 @@ const Instructions = require('./instructions/instructionsModel')
 const router = express.Router()
 
 //get all recipes from all users
-router.get('/all-users', (req, res) => {
+router.get('/all', (req, res) => {
     Recipes.getAllRecipes()
     .then(recipes => {
         console.log(recipes)
@@ -20,7 +20,7 @@ router.get('/all-users', (req, res) => {
 })
 
 // get recipe by id from any user
-router.get('/all-users/:id', validateRecipeId, (req, res) => {
+router.get('/all/:id', validateRecipeId, (req, res) => {
     res.status(200).json(req.recipe)    
 })
 
@@ -120,6 +120,8 @@ router.put('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) =
     })
 })
 
+//get any users recipe ingredients
+
 //get all ingredients for a recipe
 router.get('/my-recipes/:id/ingredients', (req, res) => {
     const { id } = req.params
@@ -136,6 +138,7 @@ router.get('/my-recipes/:id/ingredients', (req, res) => {
 })
 
 //get a particular ingredient for a recipe
+//*** need to add user validation */
 router.get('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
     const { id, ing_id } = req.params
 
@@ -151,6 +154,7 @@ router.get('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
 })
 
 //add an ingredient to a recipe
+//*** need to add user validation */
 router.post('/my-recipes/:id/ingredients', (req, res) => {
     const { id } = req.params
     const { ingredient, recipe_id } = req.body
@@ -167,6 +171,7 @@ router.post('/my-recipes/:id/ingredients', (req, res) => {
 })
 
 //remove a particular ingredient from a recipe
+//*** need to add user validation */
 router.delete('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
     const { id, ing_id} = req.params
 
@@ -186,6 +191,7 @@ router.delete('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
 })
 
 //edit a recipe's particular ingredient 
+//*** need to add user validation */
 router.put('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
     const { id, ing_id } = req.params
     const { ingredient, recipe_id } = req.body
@@ -205,7 +211,23 @@ router.put('/my-recipes/:id/ingredients/:ing_id', (req, res) => {
     })
 })
 
+//get any user's recipe instructions
+router.get('/all/:id/instructions', (req, res) => {
+    const { id } = req.params
 
+    Instructions.getInstructions(id)
+    .then(instructions => {
+        console.log(instructions)
+        res.status(200).json(instructions)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+//get user's recipe instructions
+//*** need to add user validation */
 router.get('/my-recipes/:id/instructions', (req, res) => {
     const { id } = req.params
 
@@ -218,6 +240,53 @@ router.get('/my-recipes/:id/instructions', (req, res) => {
         console.log(err)
         res.status(500).json({ message: err.message })
     })
+})
+
+//add instructions for a recipe
+router.post('/my-recipes/:id/instructions', (req, res) => {
+    const { id } = req.params
+    const { step_number, instructions, recipe_id } = req.body
+
+    Instructions.addInstructions({ step_number, instructions, recipe_id: id})
+    .then(directions => {
+        console.log(directions)
+        res.status(201).json(directions)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({ message: err.message })
+    })
+})
+
+//edit instructions for a recipe
+router.put('/my-recipes/:id/instructions/:ins_id', (req,res) => {
+    const { id, ins_id } = req.params
+    const { instructions, recipe_id, step_number } = req.body
+
+    // Instructions.findInstructionsById(ins_id).then(instructions => {
+    //     Instructions.updateInstructions(ins_id, { instructions, recipe_id: id })
+    //     .then(updated => {
+    //         console.log(updated)
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }) 
+
+    Instructions.updateInstructions(ins_id, { instructions, recipe_id: id, step_number })
+        .then(updated => {
+            console.log(updated)
+            if(updated > 0) {
+                res.status(200).json({ message: 'instructions updated'})
+            } else {
+                res.status(400).json({ message: 'error updating instructions'})
+            } 
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: err.message })
+        })
+   
 })
 
 
