@@ -14,6 +14,7 @@ password: 'test' //string, required (will be hashed)
 
 
 ## **Recipes**
+```
 id: 1 //auto-generated
 title: 'Easy Tuna Casserole' // string, required
 source: 'Grandma May' //string, required
@@ -21,6 +22,7 @@ image: 'image_url' //string, optional
 description: 'yummy and quick casserole, thats been in our family for years' //optional
 category: 'dinner' //optional
 username: 'loveToCook82' // string, (user who posted recipe)
+```
 
 ### /recipes/all
 | Method | URL               | Description                            |
@@ -47,9 +49,11 @@ username: 'loveToCook82' // string, (user who posted recipe)
 
 
 ## **Ingredients**
+```
 id: 1, // auto-generated
 ingredient: "3 cups of cooked macaroni" //string, required
 recipe_id: 1 // auto-generated
+```
 
 ### /recipes/all/:id/ingrededients
 | Method | URL                          | Description                                             |
@@ -68,10 +72,12 @@ recipe_id: 1 // auto-generated
 | DELETE | /recipes/my-recipes /:id/ingredients/:ing_id | delete ingredient from specific recipe from user    |
 
 ## **Insructions**
+```
 id: 1 //auto-generated
 step_number: 1 // integer, required
 instructions: 'Preheat oven to 350 degrees F' // string, required
 recipe_id: 1 //auto-generated
+```
 
 
 ### /recipes/all/:id/instructions
