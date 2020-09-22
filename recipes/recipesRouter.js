@@ -27,7 +27,7 @@ router.get('/all/:id', validateRecipeId, (req, res) => {
 
 
 //get all recipes from logged-in user
-router.get('/my-recipes', (req, res) => {
+router.get('/user-recipes', (req, res) => {
     const user_id = req.jwt.subject
     Recipes.getUserRecipes(user_id)
     .then(userRecipes => {
@@ -45,7 +45,7 @@ router.get('/my-recipes', (req, res) => {
 })
 
 //get logged-in user's recipe by id
-router.get('/my-recipes/:id', validateRecipeId, (req, res) => {
+router.get('/user-recipes/:id', validateRecipeId, (req, res) => {
     const user_id = req.jwt.username
     const { id } = req.params
 
@@ -66,7 +66,7 @@ router.get('/my-recipes/:id', validateRecipeId, (req, res) => {
 })
 
 //add logged-in user's new recipe
-router.post('/my-recipes', (req, res) => {
+router.post('/user-recipes', (req, res) => {
     const { title, source, image, description, category, user_id } = req.body
     const userId = req.jwt.subject
 
@@ -82,7 +82,7 @@ router.post('/my-recipes', (req, res) => {
 })
 
 //removed logged-in user's recipe
-router.delete('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
+router.delete('/user-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
     const { id } = req.params
 
     Recipes.removeUserRecipe(id)
@@ -102,7 +102,7 @@ router.delete('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res
 })
 
 //edit logged-in users recipe
-router.put('/my-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
+router.put('/user-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
     const { id }  = req.params
     const changes = req.body
     // const userId = req.jwt.subject
@@ -137,7 +137,7 @@ router.get('/all/:id/ingredients', (req, res) => {
 })
 
 //get all ingredients for a recipe
-router.get('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, (req, res) => {
+router.get('/user-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, (req, res) => {
     const { id } = req.params
    
     Ingredients.getIngredients(id)
@@ -157,8 +157,7 @@ router.get('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, 
 })
 
 //get a particular ingredient for a recipe
-//*** need to add user validation */
-router.get('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRecipeId,(req, res) => {
+router.get('/user-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRecipeId,(req, res) => {
     const { id, ing_id } = req.params
 
     Ingredients.findIngredientById(ing_id)
@@ -177,7 +176,7 @@ router.get('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRe
 })
 
 //add an ingredient to a recipe
-router.post('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, validateIngredients,(req, res) => {
+router.post('/user-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, validateIngredients,(req, res) => {
     const { id } = req.params
     const { ingredient, recipe_id } = req.body
 
@@ -193,8 +192,7 @@ router.post('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId,
 })
 
 //remove a particular ingredient from a recipe
-//*** need to add user validation */
-router.delete('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe,validateRecipeId, (req, res) => {
+router.delete('/user-recipes/:id/ingredients/:ing_id', validateUserRecipe,validateRecipeId, (req, res) => {
     const { id, ing_id} = req.params
 
     Ingredients.removeIngredients(ing_id) 
@@ -214,7 +212,7 @@ router.delete('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe,validate
 
 //edit a recipe's particular ingredient 
 //*** need to add user validation */
-router.put('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRecipeId, validateIngredients, (req, res) => {
+router.put('/user-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRecipeId, validateIngredients, (req, res) => {
     const { id, ing_id } = req.params
     const { ingredient, recipe_id } = req.body
 
@@ -249,7 +247,7 @@ router.get('/all/:id/instructions', validateRecipeId, (req, res) => {
 })
 
 //get user's recipe instructions
-router.get('/my-recipes/:id/instructions', validateUserRecipe, (req, res) => {
+router.get('/user-recipes/:id/instructions', validateUserRecipe, (req, res) => {
     const { id } = req.params
 
     Instructions.getInstructions(id)
@@ -268,7 +266,7 @@ router.get('/my-recipes/:id/instructions', validateUserRecipe, (req, res) => {
 })
 
 //add instructions for a recipe
-router.post('/my-recipes/:id/instructions', validateUserRecipe,(req, res) => {
+router.post('/user-recipes/:id/instructions', validateUserRecipe,(req, res) => {
     const { id } = req.params
     const { step_number, instructions, recipe_id } = req.body
 
@@ -284,7 +282,7 @@ router.post('/my-recipes/:id/instructions', validateUserRecipe,(req, res) => {
 })
 
 //edit instructions for a recipe
-router.put('/my-recipes/:id/instructions/:ins_id', validateUserRecipe, (req,res) => {
+router.put('/user-recipes/:id/instructions/:ins_id', validateUserRecipe, (req,res) => {
     const { id, ins_id } = req.params
     const { instructions, recipe_id, step_number } = req.body
 
@@ -305,7 +303,7 @@ router.put('/my-recipes/:id/instructions/:ins_id', validateUserRecipe, (req,res)
 })
 
 //delete recipe instructions
-router.delete('/my-recipes/:id/instructions/:ins_id', validateUserRecipe, (req, res) => {
+router.delete('/user-recipes/:id/instructions/:ins_id', validateUserRecipe, (req, res) => {
     const { id, ins_id } = req.params
 
     Instructions.removeInstructions(ins_id) 

@@ -1,12 +1,11 @@
 const db = require('../data/db-connection')
+const { orderBy } = require('../data/db-connection')
 
 module.exports = {
     add,
     findBy,
     findById,
-    // removeUserRecipe,
-    // getUserRecipes, 
-    // updateUserRecipe
+    getUsers
 }
 
 function findBy(filter) {
@@ -27,4 +26,9 @@ function add(user) {
     .then(([id]) => {
         return findById(id)
     })
+}
+
+function getUsers() {
+    return db('users')
+    orderBy('users.id')
 }

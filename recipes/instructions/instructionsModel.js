@@ -12,7 +12,7 @@ module.exports = {
 function getInstructions(recipe_id) {
     return db('instructions')
     .join('recipes', 'recipes.id', 'instructions.recipe_id')
-    .select('instructions.id', 'instructions.step_number', 'instructions.instructions')
+    .select('instructions.id', 'instructions.step_number', 'instructions.instructions', 'recipes.id as recipe_id')
     .where('recipes.id', recipe_id)
     .orderBy('instructions.step_number')
 }
