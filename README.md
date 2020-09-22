@@ -21,7 +21,7 @@ id: 1; // auto-generated
 title: 'Easy Tuna Casserole'; // string, required
 source: 'Grandma May'; // string, required
 image: 'image_url'; // string, optional
-description: 'yummy and quick casserole, thats been in our family for years'; // optional
+description: 'yummy and quick casserole, thats been in our family for years'; // string, optional
 category: 'dinner'; // string, optional
 username: 'loveToCook82'; // string, auto-generated (user who posted recipe)
 ```
@@ -29,8 +29,8 @@ username: 'loveToCook82'; // string, auto-generated (user who posted recipe)
 ### /recipes/all
 | Method | URL               | Description                                |
 | ------ | ----------------- | ------------------------------------------ |
-| POST   | /recipes/all      | fetch all recipes from all users           |
-| POST   | /recipes/all/:id  | fetch specific recipe from any user        |
+| GET    | /recipes/all      | fetch all recipes from all users           |
+| GET    | /recipes/all/:id  | fetch specific recipe from any user        |
 
 
 
@@ -80,7 +80,7 @@ recipe_id: 1; // auto-generated
 id: 1; //auto-generated
 step_number: 1; // integer, required
 instructions: 'Preheat oven to 350 degrees F'; // string, required
-recipe_id: 1; //auto-generated
+recipe_id: 1; // auto-generated
 ```
 
 ### /recipes/all/:id/instructions
