@@ -1,9 +1,11 @@
 # Base URL: https://bw-secret-family-recipes.herokuapp.com
 
 ## **Users**
-id: 1 //auto-generated
+```
+id: 1 // auto-generated
 username: 'loveToCook82' // string, required
 password: 'test' //string, required (will be hashed)
+```
 
 ### /auth
 | Method | URL            | Description         |
@@ -15,13 +17,13 @@ password: 'test' //string, required (will be hashed)
 
 ## **Recipes**
 ```
-id: 1 //auto-generated
-title: 'Easy Tuna Casserole' // string, required
-source: 'Grandma May' //string, required
-image: 'image_url' //string, optional
-description: 'yummy and quick casserole, thats been in our family for years' //optional
-category: 'dinner' //optional
-username: 'loveToCook82' // string, (user who posted recipe)
+id: 1; // auto-generated
+title: 'Easy Tuna Casserole'; // string, required
+source: 'Grandma May'; // string, required
+image: 'image_url'; // string, optional
+description: 'yummy and quick casserole, thats been in our family for years'; // optional
+category: 'dinner'; // optional
+username: 'loveToCook82'; // string, (user who posted recipe)
 ```
 
 ### /recipes/all
@@ -33,7 +35,7 @@ username: 'loveToCook82' // string, (user who posted recipe)
 
 
 ## **User Recipes**
- > any endpoint with `/recipes/my-recipes`:
+ > any endpoint beginning with `/recipes/my-recipes`:
  >  * a user will only be able to view, post, edit, and delete their own recipes
  >  * will not be able to manipulate other user's recipes
 
@@ -50,9 +52,9 @@ username: 'loveToCook82' // string, (user who posted recipe)
 
 ## **Ingredients**
 ```
-id: 1, // auto-generated
-ingredient: "3 cups of cooked macaroni" //string, required
-recipe_id: 1 // auto-generated
+id: 1; // auto-generated
+ingredient: "3 cups of cooked macaroni"; //string, required
+recipe_id: 1; // auto-generated
 ```
 
 ### /recipes/all/:id/ingrededients
@@ -73,10 +75,10 @@ recipe_id: 1 // auto-generated
 
 ## **Insructions**
 ```
-id: 1 //auto-generated
-step_number: 1 // integer, required
-instructions: 'Preheat oven to 350 degrees F' // string, required
-recipe_id: 1 //auto-generated
+id: 1; //auto-generated
+step_number: 1; // integer, required
+instructions: 'Preheat oven to 350 degrees F'; // string, required
+recipe_id: 1; //auto-generated
 ```
 
 
