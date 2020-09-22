@@ -157,7 +157,6 @@ router.get('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId, 
 })
 
 //get a particular ingredient for a recipe
-//*** need to add user validation */
 router.get('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe, validateRecipeId,(req, res) => {
     const { id, ing_id } = req.params
 
@@ -193,7 +192,6 @@ router.post('/my-recipes/:id/ingredients', validateUserRecipe, validateRecipeId,
 })
 
 //remove a particular ingredient from a recipe
-//*** need to add user validation */
 router.delete('/my-recipes/:id/ingredients/:ing_id', validateUserRecipe,validateRecipeId, (req, res) => {
     const { id, ing_id} = req.params
 
