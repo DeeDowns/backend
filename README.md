@@ -35,8 +35,8 @@ username: 'loveToCook82'; // string, auto-generated (user who posted recipe)
 
 
 ## **User Recipes**
- > any endpoint beginning with `/recipes/user-recipes`:
- >  * a user will only be able to view, post, edit, and delete their own recipes
+ > any endpoint beginning with `/recipes/user-recipes` means that the user currently logged in:
+ >  * will only be able to view, post, edit, and delete their own recipes
  >  * will not be able to manipulate other user's recipes
 
 ### /recipes/user-recipes
