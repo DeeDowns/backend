@@ -35,18 +35,18 @@ username: 'loveToCook82'; // string, (user who posted recipe)
 
 
 ## **User Recipes**
- > any endpoint beginning with `/recipes/my-recipes`:
+ > any endpoint beginning with `/recipes/user-recipes`:
  >  * a user will only be able to view, post, edit, and delete their own recipes
  >  * will not be able to manipulate other user's recipes
 
-### /recipes/my-recipes
+### /recipes/user-recipes
 | Method | URL                      | Description                       |
 | ------ | ------------------------ | --------------------------------- |
-| GET    | /recipes/my-recipes      | fetch all recipes from user       |
-| GET    | /recipes/my-recipes/:id  | fetch specific recipe from user   |
-| POST   | /recipes/my-recipes      | add new recipe from user          |
-| PUT    | /recipes/my-recipes/:id  | update specific recipe from user  |
-| DELETE | /recipes/my-recipes /:id | delete specific recipe from users |
+| GET    | /recipes/user-recipes      | fetch all recipes from user       |
+| GET    | /recipes/user-recipes/:id  | fetch specific recipe from user   |
+| POST   | /recipes/user-recipes      | add new recipe from user          |
+| PUT    | /recipes/user-recipes/:id  | update specific recipe from user  |
+| DELETE | /recipes/user-recipes /:id | delete specific recipe from users |
 
 
 
@@ -64,14 +64,14 @@ recipe_id: 1; // auto-generated
 
 
 ## **User Ingredients**
-### /recipes/my-recipes/:id/ingredients
+### /recipes/user-recipes/:id/ingredients
 | Method | URL                                          | Description                                         |
 | ------ | -------------------------------------------- | --------------------------------------------------- |
-| GET    | /recipes/my-recipes/:id/ingredients          | fetch all ingredients for specific recipe from user |
-| GET    | /recipes/my-recipes/:id/ingredients/:ing_id  | fetch specific recipe from user                     |
-| POST   | /recipes/my-recipes/:id/ingredients          | add new ingredient to specific recipe from user     |
-| PUT    | /recipes/my-recipes/:id/ingredients/:ing_id  | update ingredient for specific recipe from user     |
-| DELETE | /recipes/my-recipes /:id/ingredients/:ing_id | delete ingredient from specific recipe from user    |
+| GET    | /recipes/user-recipes/:id/ingredients          | fetch all ingredients for specific recipe from user |
+| GET    | /recipes/user-recipes/:id/ingredients/:ing_id  | fetch specific recipe from user                     |
+| POST   | /recipes/user-recipes/:id/ingredients          | add new ingredient to specific recipe from user     |
+| PUT    | /recipes/user-recipes/:id/ingredients/:ing_id  | update ingredient for specific recipe from user     |
+| DELETE | /recipes/user-recipes /:id/ingredients/:ing_id | delete ingredient from specific recipe from user    |
 
 ## **Insructions**
 ```
@@ -89,11 +89,11 @@ recipe_id: 1; //auto-generated
 
 
 ## **User Instructions**
-### /recipes/my-recipes/:id/instructions
+### /recipes/user-recipes/:id/instructions
 | Method | URL                                          | Description                                       |
 | ------ | -------------------------------------------- | ------------------------------------------------  |
-| GET    | /recipes/my-recipes/:id/instructions          | fetch all recipes from user                      |
-| GET    | /recipes/my-recipes/:id/instructions/:ing_id  | fetch specific recipe from user                  |
-| POST   | /recipes/my-recipes/:id/instructions          | add new ingredient to specific recipe from user  |
-| PUT    | /recipes/my-recipes/:id/instructions/:ing_id  | update ingredient for specific recipe from user  |
-| DELETE | /recipes/my-recipes /:id/instructions/:ing_id | delete ingredient from specific recipe from user |
+| GET    | /recipes/user-recipes/:id/instructions          | fetch all recipes from user                      |
+| GET    | /recipes/user-recipes/:id/instructions/:ing_id  | fetch specific recipe from user                  |
+| POST   | /recipes/user-recipes/:id/instructions          | add new ingredient to specific recipe from user  |
+| PUT    | /recipes/user-recipes/:id/instructions/:ing_id  | update ingredient for specific recipe from user  |
+| DELETE | /recipes/user-recipes /:id/instructions/:ing_id | delete ingredient from specific recipe from user |
