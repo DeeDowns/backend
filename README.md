@@ -4,6 +4,7 @@
 ```
 id: 1; // auto-generated
 username: 'loveToCook82'; // string, required
+email: 'loveToCook82@email.com'; //string, required
 password: 'test'; //string, required (will be hashed)
 ```
 
