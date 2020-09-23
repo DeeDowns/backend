@@ -24,7 +24,7 @@ describe('authRouter', () => {
         })
     })
     describe('POST to /auth/login', () => {
-        it('should return http status code 201 when user logs', () => {
+        it('should return http status code 200 when user logs', () => {
             return supertest(server)
             .post('/auth/login')
             .send({ username: 'testUser1', password: 'test' })
