@@ -9,19 +9,16 @@ beforeAll(() => {
 
   describe('authRouter', () => {
     describe('POST to /auth/register', () => {
-        it('should return http status code 201 when users register', () => {
-            return supertest(server)
+        it('should return http status code 201 when users register', async () => {
+            await supertest(server)
             .post('/auth/register')
             .send({ username: 'testUser1', email: 'testUser1@email.com', password: 'test' })
-            .then(res => {
-                expect(res.status).toBe(201)
-            })
         })
     }) 
 })
 
 describe('recipesRouter', () => {
-    describe('GET to /recipes/all', () => {
+    describe('GET to /all', () => {
         it('should return http status code 200 and array of recipes when user is authenticated and logged in', async () => {
             const login = await supertest(server) 
             .post('/auth/login')
@@ -37,7 +34,7 @@ describe('recipesRouter', () => {
            
         })
     })
-    describe('GET to /recipes/all/:id', () => {
+    describe('GET to /all/:id', () => {
         it('should return http status code 200 and correct recipe', async () => {
             const login = await supertest(server) 
             .post('/auth/login')
@@ -63,6 +60,21 @@ describe('recipesRouter', () => {
                 expect(res.status).toBe(404)
                 expect(res.body.message).toBe('recipe not found')
             })
+        })
+    })
+    describe('GET /user-recipes', () => {
+        it('should return http status code 200', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/user-recipes')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+            })
+            
         })
     })
 })
