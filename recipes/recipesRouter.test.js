@@ -228,4 +228,166 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+    describe('GET /all/:id/ingredients', () => {
+        it('should return 200 code and correct amount of ingredients when fetching ingredients for any users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/all/1/ingredients')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+            }) 
+        })
+        it('should return correct amount of ingredients when fetching ingredients for any users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/all/1/ingredients')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.body.length).toBe(4)
+            }) 
+        })
+    })
+    describe('GET /user-recipes/:id/ingredients', () => {
+        it('should return 200 status code and ingredients if users has recipes and add ingredients message is user doesnt', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/user-recipes/5/ingredients')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                if(res.body.length === 0){
+                    expect(res.body.message).toBe('add ingredients for this recipe')
+                } else if (res.body.length > 0) {
+                    expect(res.status).toBe(200)
+                    console.log(res.body)
+                }
+            })
+        })
+    })
+    describe('POST /user-recipes/:id/ingredients/', () => {
+        it('should return 201 status code when adding an ingredient', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .post('/recipes/user-recipes/5/ingredients')
+            .set('Authorization', login.body.token)
+            .send({ 
+                ingredient: 'test ingredient'
+            })
+            .then(res => {
+                expect(res.status).toBe(201) 
+            }) 
+        })
+        it('should return 400 status code and message if user is missing ingredient info', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .post('/recipes/user-recipes/5/ingredients')
+            .set('Authorization', login.body.token)
+            .send({})
+            .then(res => {
+                expect(res.status).toBe(400) 
+                expect(res.body.message).toBe('must add ingredients')
+            }) 
+        })
+    })
+    describe('GET /user-recipes/:id/ingredients/:ing_id', () => {
+        it('should return 200 status code and ingredient if ingredient exists', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/user-recipes/5/ingredients/12')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+            }) 
+        })
+        it('should return 400 status code if ingredient doesnt exists', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/user-recipes/5/ingredients/13')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(400)
+                expect(res.body.message).toBe('ingredient not found')
+            }) 
+        })
+    })
+    describe('PUT /user-recipes/:id/ingredients/:ing_id', () => {
+        it('return 200 status code and message if ingredient is updated', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/5/ingredients/12')
+            .set('Authorization', login.body.token)
+            .send({ ingredient: 'test ingredient 2.0'})
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('ingredient updated')
+            }) 
+        })
+        it('return 403 status code and message if user tries to update ingredient for another users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/2/ingredients/1')
+            .set('Authorization', login.body.token)
+            .send({ ingredient: 'test ingredient 2.0'})
+            .then(res => {
+                expect(res.status).toBe(403)
+                expect(res.body.message).toBe('recipe not yours')
+            }) 
+        })
+    })
+    describe('/user-recipes/:id/ingredients/:ing_id', () => {
+        it('should return 200 code and message when ingredient is removed', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/5/ingredients/12')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('ingredient removed')
+            }) 
+        })
+        it('should return 403 code and message when users tries to remove ingredient from another users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/1/ingredients/1')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(403)
+                expect(res.body.message).toBe('recipe not yours')
+            }) 
+        })
+    })
+    
 })
