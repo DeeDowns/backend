@@ -389,5 +389,153 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+    describe('GET /all/:id/instructions', () => {
+        it('should return 200 code and instructions for any recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/all/1/instructions/')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.length).toBe(3)
+            }) 
+        })
+        it('should return 404 code and if recipe does not exist', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/all/10/instructions/')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(404)
+                expect(res.body.message).toBe('recipe not found')
+            }) 
+        })
+    })
+    describe('GET /user-recipes/:id/instructions', () => {
+        it('should return 200 code if user recipe has instructions and a message if user recipe has no instructions', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .get('/recipes/user-recipes/5/instructions/')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                if(res.body.length === 0) {
+                    expect(res.status).toBe(200)
+                    expect(res.body.message).toBe('add instructions for this recipe')
+                } else if (res.body.length > 0) {
+                    expect(res.status).toBe(200)
+                }
+            })
+        })
+    })
+    describe('POST /user-recipes/:id/instructions', () => {
+        it('should return 201 code when user add instructions', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .post('/recipes/user-recipes/5/instructions/')
+            .set('Authorization', login.body.token)
+            .send({
+                step_number: 1,
+                instructions: 'test instructions'
+            })
+            .then(res => {
+                expect(res.status).toBe(201)
+            })
+        })
+        it('should return 403 code when user tries to add instructions to another users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .post('/recipes/user-recipes/1/instructions/')
+            .set('Authorization', login.body.token)
+            .send({
+                step_number: 1,
+                instructions: 'test instructions'
+            })
+            .then(res => {
+                expect(res.status).toBe(403)
+            })
+        })
+    })
+    describe('PUT /user-recipes/:id/instructions/:ins_id', () => {
+        it('should return 200 code and message when user edits instructions', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/5/instructions/10')
+            .set('Authorization', login.body.token)
+            .send({
+                step_number: 1,
+                instructions: 'test instructions 2.0'
+            })
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('instructions updated')
+            })
+        })
+        it('should return 403 code when user tries to update instructions for another users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/1/instructions/1')
+            .set('Authorization', login.body.token)
+            .send({
+                step_number: 1,
+                instructions: 'test instructions'
+            })
+            .then(res => {
+                expect(res.status).toBe(403)
+                expect(res.body.message).toBe('recipe not yours')
+            })
+        })
+    })
+    describe('DELETE /user-recipes/:id/instructions/:ins_id', () => {
+        it('should return 200 code and message when instructions are removed', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/5/instructions/10')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('instructions removed')
+            })
+        })
+        it('should return 403 code and message when user tries to remove another users instructions', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/1/instructions/1')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(403)
+                expect(res.body.message).toBe('recipe not yours')
+            })
+        })
+    })
+    
+    
+    
     
 })
