@@ -32,7 +32,7 @@ router.get('/user-recipes', (req, res) => {
     Recipes.getUserRecipes(user_id)
     .then(userRecipes => {
         console.log(userRecipes)
-        if(!userRecipes) {
+        if(userRecipes.length === 0) {
             res.status(404).json({ message: 'you do not have any recipes' })
         } else {
             res.status(200).json(userRecipes)

@@ -3,9 +3,9 @@ const supertest = require('supertest')
 const server = require('../api/server')
 const db = require('../data/db-connection')
 
-beforeAll(() => {
-  return db.seed.run()
-})
+// beforeAll(() => {
+//   return db.seed.run()
+// })
 
 describe('/', () => {
     describe('GET to /', () => {
