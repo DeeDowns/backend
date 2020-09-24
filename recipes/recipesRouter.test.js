@@ -2,6 +2,7 @@ const supertest = require('supertest')
 
 const server = require('../api/server')
 const db = require('../data/db-connection')
+const { as } = require('../data/db-connection')
 
 afterAll(() => {
     return db.seed.run()
@@ -63,7 +64,7 @@ describe('recipesRouter', () => {
         })
     })
     describe('GET /user-recipes', () => {
-        it('should return http status code 200 if user has recipes and 404 if user doesnt', async () => {
+        it('should return http status code 200 if user has recipes and 404 if user doesnt have any recipes', async () => {
             const login = await supertest(server) 
             .post('/auth/login')
             .send({ username: 'testUser1', password: 'test' })
@@ -154,6 +155,76 @@ describe('recipesRouter', () => {
                     category: 'test category',
                     username: 'testUser1'
                 })
+            }) 
+        })
+    })
+    describe('PUT /user-recipes/:id', () => {
+        it('should return http status code 200 and recipe updated message when recipe is edited ', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/4')
+            .set('Authorization', login.body.token)
+            .send({
+                title: 'test recipe updated',
+                source: 'test source',
+                image: 'test_url',
+                description: 'test description',
+                category: 'test category',
+            })
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('recipe updated')
+            }) 
+        })
+        it('should return 404 code and recipe not found message if recipe does not exist', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .put('/recipes/user-recipes/10')
+            .set('Authorization', login.body.token)
+            .send({
+                title: 'test recipe updated',
+                source: 'test source',
+                image: 'test_url',
+                description: 'test description',
+                category: 'test category'
+            })
+            .then(res => {
+                expect(res.status).toBe(404)
+                expect(res.body.message).toBe('recipe not found')
+            }) 
+        })
+    })
+    describe('DELETE /user-recipes/:id', () => {
+        it('should return 200 code and recipe removed message when user recipe is deleted', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/4')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(200)
+                expect(res.body.message).toBe('recipe removed')
+            }) 
+        })
+        it('should return 403 code and recipe not yours message when user tries to delete another users recipe', async () => {
+            const login = await supertest(server) 
+            .post('/auth/login')
+            .send({ username: 'testUser1', password: 'test' })
+
+            return supertest(server)
+            .delete('/recipes/user-recipes/1')
+            .set('Authorization', login.body.token)
+            .then(res => {
+                expect(res.status).toBe(403)
+                expect(res.body.message).toBe('recipe not yours')
             }) 
         })
     })
