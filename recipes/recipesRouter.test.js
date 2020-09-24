@@ -63,6 +63,8 @@ describe('recipesRouter', () => {
             })
         })
     })
+
+
     describe('GET /user-recipes', () => {
         it('should return http status code 200 if user has recipes and 404 if user doesnt have any recipes', async () => {
             const login = await supertest(server) 
@@ -124,7 +126,7 @@ describe('recipesRouter', () => {
             })
         })
     })
-    describe('GET /user-recipes/4', () => {
+    describe('GET /user-recipes/:id', () => {
         it('should return http status code 200', async () => {
             const login = await supertest(server) 
             .post('/auth/login')
@@ -228,6 +230,8 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+
+
     describe('GET /all/:id/ingredients', () => {
         it('should return 200 code and correct amount of ingredients when fetching ingredients for any users recipe', async () => {
             const login = await supertest(server) 
@@ -254,6 +258,8 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+
+
     describe('GET /user-recipes/:id/ingredients', () => {
         it('should return 200 status code and ingredients if users has recipes and add ingredients message is user doesnt', async () => {
             const login = await supertest(server) 
@@ -389,6 +395,8 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+
+
     describe('GET /all/:id/instructions', () => {
         it('should return 200 code and instructions for any recipe', async () => {
             const login = await supertest(server) 
@@ -417,6 +425,8 @@ describe('recipesRouter', () => {
             }) 
         })
     })
+
+
     describe('GET /user-recipes/:id/instructions', () => {
         it('should return 200 code if user recipe has instructions and a message if user recipe has no instructions', async () => {
             const login = await supertest(server) 
@@ -533,9 +543,5 @@ describe('recipesRouter', () => {
                 expect(res.body.message).toBe('recipe not yours')
             })
         })
-    })
-    
-    
-    
-    
+    })  
 })
