@@ -36,7 +36,6 @@ describe('recipesRouter', () => {
         it('should return unauthorized message if user tries to access recipes without token', async () => {
             return supertest(server)
             .get('/recipes/all')
-            // .set('Authorization', login.body.token)
             .then( res => {
                 expect(res.body.message).toBe('unauthorized')
             })  
