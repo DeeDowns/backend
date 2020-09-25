@@ -118,6 +118,7 @@ router.put('/user-recipes/:id', validateRecipeId, validateUserRecipe, (req, res)
     })
     .catch(err => {
         console.log(err)
+        res.status(500).json({message: err.message})
     })
 })
 
