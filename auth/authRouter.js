@@ -11,7 +11,9 @@ router.post('/register', validateNewUser, (req, res) => {
     const rounds = process.env.BCRYPT_ROUNDS || 8
     const hash = bcrypt.hashSync(credentials.password, rounds)
     credentials.password = hash
-  
+    if(!credentials) {
+        res.status(400).json({message: 'missing user information'})
+    } else {
       Users.add(credentials)
       .then(user => {
         console.log(user)
@@ -22,30 +24,34 @@ router.post('/register', validateNewUser, (req, res) => {
         console.log(err)
         res.status(500).json({ message: err.message })
       })
-   
+    }
   });
 
 router.post('/login', validateUser, (req, res) => {
     const { username, password } = req.body
 
-    Users.findBy({ username: username })
-    .then(([user]) => {
-        console.log(user)
-        if(user && bcrypt.compareSync(password, user.password)) {
-            const token = makeJwt(user)
-            res.status(200).json({
-                message: `Welcome ${user.username}`,
-                token
-            })
-        } else {
-            res.status(400).json({ message: 'invalid credentials' })
-        }
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).json({ message: err.message })
+    if(!req.body) {
+        res.status(400).json({message: 'missing user information'})
+    } else {
+        Users.findBy({ username: username })
+        .then(([user]) => {
+            console.log(user)
+            if(user && bcrypt.compareSync(password, user.password)) {
+                const token = makeJwt(user)
+                res.status(200).json({
+                    message: `Welcome ${user.username}`,
+                    token
+                })
+            } else {
+                res.status(400).json({ message: 'invalid credentials' })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: err.message })
 
-    })
+        })
+    }
 })
 
 function validateNewUser(req, res, next) {

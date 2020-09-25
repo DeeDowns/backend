@@ -22,6 +22,15 @@ describe('authRouter', () => {
                 expect(res.status).toBe(201)
             })
         })
+        it('should return http status code 400 if user registers incorrectly', () => {
+            return supertest(server)
+            .post('/auth/register')
+            .send({})
+            .then(res => {
+                expect(res.status).toBe(400)
+                expect(res.body.message).toBe('username, email, and password required')
+            })
+        })
     })
     describe('POST to /auth/login', () => {
         it('should return http status code 200 when user logs', () => {
@@ -30,6 +39,15 @@ describe('authRouter', () => {
             .send({ username: 'testUser1', password: 'test' })
             .then(res => {
                 expect(res.status).toBe(200)
+            })
+        })
+        it('should return http status code 400 if user logs in incorrectly', () => {
+            return supertest(server)
+            .post('/auth/login')
+            .send({})
+            .then(res => {
+                expect(res.status).toBe(400)
+                expect(res.body.message).toBe('username and password required')
             })
         })
     })  

@@ -4,7 +4,7 @@ const server = require('../api/server')
 const db = require('../data/db-connection')
 const { as } = require('../data/db-connection')
 
-afterAll(() => {
+beforeAll(() => {
     return db.seed.run()
 })
 
@@ -31,8 +31,14 @@ describe('recipesRouter', () => {
             .then( res => {
                 expect(res.status).toBe(200)
                 expect(res.body.length).toBeGreaterThanOrEqual(3)
-            })
-           
+            })  
+        })
+        it('should return unauthorized message if user tries to access recipes without token', async () => {
+            return supertest(server)
+            .get('/recipes/all')
+            .then( res => {
+                expect(res.body.message).toBe('unauthorized')
+            })  
         })
     })
     describe('GET to /all/:id', () => {
