@@ -102,9 +102,7 @@ router.delete('/user-recipes/:id', validateRecipeId, validateUserRecipe, (req, r
 })
 
 //edit logged-in users recipe
-router.put('/user-recipes/:id', validateRecipeId,
-//  validateUserRecipe,
-  (req, res) => {
+router.put('/user-recipes/:id', validateRecipeId, validateUserRecipe, (req, res) => {
     const { id }  = req.params
     const changes = req.body
     // const userId = req.jwt.subject
